@@ -1,5 +1,6 @@
 package gavus.addressbook.app_manager;
 
+import gavus.addressbook.app_manager.navigation.NavigationHelper;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -19,14 +20,16 @@ public class ApplicationManager {
     private GroupHelper groupHelper;
     private NavigationHelper navigationHelper;
     private SessionHelper sessionHelper;
+    private ContactHelper contactHelper;
 
-    public void init() {
+    public void init(long implicitlyWait, String url) {
         setDriver();
-        driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
-        driver.get("http://localhost/addressbook/group.php");
+        driver.manage().timeouts().implicitlyWait(implicitlyWait, TimeUnit.SECONDS);
+        driver.get(url);
         groupHelper = new GroupHelper(driver);
         navigationHelper = new NavigationHelper(driver);
         sessionHelper = new SessionHelper(driver);
+        contactHelper = new ContactHelper(driver);
     }
 
     public void stop() {
@@ -55,5 +58,9 @@ public class ApplicationManager {
 
     public SessionHelper getSessionHelper() {
         return sessionHelper;
+    }
+
+    public ContactHelper getContactHelper() {
+        return contactHelper;
     }
 }

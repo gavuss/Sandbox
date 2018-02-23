@@ -42,4 +42,5 @@ public enum Group implements IGroup {
     public String getGroupFooter() {
         return groupBuilder.getGroupFooter();
     }
+
 }

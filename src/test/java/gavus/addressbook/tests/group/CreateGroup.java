@@ -1,19 +1,18 @@
 package gavus.addressbook.tests.group;
 
-import gavus.addressbook.model.group.Group;
-import org.junit.Test;
 import gavus.BaseTest;
+import gavus.addressbook.model.group.IGroup;
+import org.junit.Assert;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-
 import java.util.Arrays;
 import java.util.List;
 
-import static gavus.addressbook.model.group.Group.DEVELOPERS;
-import static gavus.addressbook.model.group.Group.GROUP_WITHOT_HEADER;
-import static gavus.addressbook.model.group.Group.TESTERS;
+import static gavus.addressbook.app_manager.navigation.NavigationHelper.Items.groups;
+import static gavus.addressbook.model.group.Group.*;
 import static gavus.addressbook.model.user.User.ADMIN;
 
 /**
@@ -22,9 +21,10 @@ import static gavus.addressbook.model.user.User.ADMIN;
 @RunWith(value = Parameterized.class)
 public class CreateGroup extends BaseTest {
 
-    private Group group;
+    private IGroup group;
+    private int startGroupCount;
 
-    public CreateGroup(Group group) {
+    public CreateGroup(IGroup group) {
         this.group = group;
     }
 
@@ -38,10 +38,17 @@ public class CreateGroup extends BaseTest {
     @Test
     public void testGroupCreation() {
         app.getSessionHelper().authorization(ADMIN);
-        app.getNavigationHelper().openGroupPage();
+        app.getNavigationHelper().openMenuItem(groups);
+        startGroupCount = app.getGroupHelper().getGroupCount();
         app.getGroupHelper().openCreationGroupPage();
         app.getGroupHelper().fillCreateGroupForm(group);
         app.getGroupHelper().saveGroupCreation();
         app.getGroupHelper().returnToGroupPage();
+        assertGroupCount(startGroupCount + 1);
+    }
+
+    private void assertGroupCount(int expectedValue) {
+        int actualValue = app.getGroupHelper().getGroupCount();
+        Assert.assertEquals(expectedValue, actualValue);
     }
 }

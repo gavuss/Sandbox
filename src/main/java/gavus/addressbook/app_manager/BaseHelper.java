@@ -2,7 +2,9 @@ package gavus.addressbook.app_manager;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.Select;
 
 /**
  * Created by Aleksander on 18.08.2016.
@@ -26,6 +28,10 @@ public class BaseHelper {
         }
     }
 
+    public void selectByText(By locator, String text) {
+        new Select(driver.findElement(locator)).selectByVisibleText(text);
+    }
+
     private boolean isNotNullValue(String text) {
         return !"#NULL".equals(text);
     }
@@ -35,6 +41,16 @@ public class BaseHelper {
             driver.switchTo().alert();
             return true;
         } catch (NoAlertPresentException e) {
+            return false;
+        }
+    }
+
+
+    protected final boolean elementIsDisplayed(By locator) {
+        try {
+            driver.findElement(locator);
+            return true;
+        } catch (NoSuchElementException e) {
             return false;
         }
     }

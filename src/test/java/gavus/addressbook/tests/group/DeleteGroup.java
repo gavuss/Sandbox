@@ -1,17 +1,16 @@
 package gavus.addressbook.tests.group;
 
-import gavus.addressbook.model.group.Group;
-import org.junit.Test;
 import gavus.BaseTest;
+import gavus.addressbook.model.group.IGroup;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-
 import java.util.Arrays;
 import java.util.List;
 
-import static gavus.addressbook.model.group.Group.DEVELOPERS;
+import static gavus.addressbook.app_manager.navigation.NavigationHelper.Items.groups;
 import static gavus.addressbook.model.group.Group.TESTERS;
 import static gavus.addressbook.model.user.User.ADMIN;
 
@@ -21,24 +20,24 @@ import static gavus.addressbook.model.user.User.ADMIN;
 @RunWith(value = Parameterized.class)
 public class DeleteGroup extends BaseTest {
 
-    private Group group;
+    private IGroup group;
 
-    public DeleteGroup(Group group) {
+    public DeleteGroup(IGroup group) {
         this.group = group;
     }
 
     @Parameters()
     public static List<Object[]> dataForTest() {
         return Arrays.asList(new Object[][]{
-                {TESTERS}, {DEVELOPERS}
+                {TESTERS}
         });
     }
 
     @Test
     public void deleteGroupTest() {
         app.getSessionHelper().authorization(ADMIN);
-        app.getNavigationHelper().openGroupPage();
-        app.getGroupHelper().selectGroupByName(group);
+        app.getNavigationHelper().openMenuItem(groups);
+        app.getGroupHelper().chooseAllGroupByName(group);
         app.getGroupHelper().deleteGroup();
         app.getGroupHelper().returnToGroupPage();
     }
